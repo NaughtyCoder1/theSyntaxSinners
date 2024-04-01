@@ -1,8 +1,8 @@
 #include<iostream>
 #include<chrono>
-#include<thread>
 #include<cmath>
 #include<random>
+#include<thread>
 using namespace std;
 
 
@@ -69,42 +69,98 @@ void updateTotalTime(Gate gate[] , int person , int i) // updates total time
     gate[i].total_time = gate[i].processing_time*person;
 }
 
-void decrement(Gate gate[] , int size) // decrements the number of people in the Queue
+int sumofPeople = 0; //keeping track of the rest of M/2 people.
+
+void timerIncrement(Gate *gate , int size , int people)
 {
-    for(int i = 0 ; i<size ; i++)
-{
-
-
-    if(gate[i].processing_time<5)
-      {
-        if(gate[i].processing_time==1)
-        {
-            gate[i].person = max(0,gate[i].person-=5); // if 1 minute is take for 1 person than in  5 minutes 5 person will be processed
-        }
-        else
-        {int temp = gate[i].processing_time%5; // from random function number will be between 1 and 5 so same logic
-        gate[i].person = max(0,gate[i].person-=temp);}
-
-      }
-      else
-        {
-             gate[i].person = max(0,gate[i].person-= 1); // if 5 minute is taken to process , then 1 will be processed in 5 minutes
-        }
-
-}
-
+    int y = getRandomNumber(1,5);
+    sumofPeople+=y;
+    cout<<"Sum of people is: "<<sumofPeople<<endl;
+    if(sumofPeople<people)
+    {
+        int x = getRandomNumber(0,size-1);
+        cout<<endl<<"The number of person alloted are: "<<y<<"And gate alloted is: "<<x+1<<endl;
+        gate[x].person += y;
+         cout<<"The total person now are: "<<gate[x].person<<endl;
+        updateTotalTime(gate , gate[x].person , x);
+        cout<<"Updated time after increment is: "<<gate[x].total_time;
+        cout<<endl;
+    }
+    else if(sumofPeople == people)
+    {
+        cout<<"The rest of half of the people are also alloted."<<endl;
+        return;
+    }
+    else
+    {
+        int extra;
+        extra = sumofPeople - people;
+        int x = getRandomNumber(0,size-1);
+        cout<<"The gate alloted is: "<<x<<"To "<<extra<<"People"<<endl;
+        gate[x].person +=extra;
+        cout<<"The total person now are: "<<gate[x].person<<endl;
+        updateTotalTime(gate , gate[x].person , x);
+    }
+    this_thread::sleep_for(chrono::minutes(1));
 }
 
 void allocateTime(Gate gate[] , int size)
 {
     for(int i = 0 ; i<size ; i++)
     {
-        int p = getRandomNumber(1,5);
-        cout<<p<<" ";
+        int p = getRandomNumber(1,2);
+        cout<<"Time for processing per person is: "<<p<<endl;
         gate[i].processing_time = p; // gate processing time gets alloacted randomly between 1 and 5 minutes , including both
         gate[i].total_time = gate[i].processing_time * gate[i].person;
     }
 
+}
+
+void decrement(Gate *gate, int size) // decrements the number of people in the Queue
+{
+    for(int i = 0 ; i<size ; i++)
+   {
+
+
+        if(gate[i].processing_time==1)
+        {
+            gate[i].person = max(0,gate[i].person-=2); // if 1 minute is take for 1 person than in  5 minutes 5 person will be processed
+        }
+      else
+        {
+             gate[i].person = max(0,gate[i].person-= 1); // if 5 minute is taken to process , then 1 will be processed in 5 minutes
+        }
+
+   }
+
+}
+
+void timerDecrement(Gate *gate , int size)
+{
+        decrement(gate , size);
+        cout<<endl;
+        for(int i = 0 ; i<size ; i++)
+        {
+            cout<<"Person Left on gate"<<i+1<<" : "<<gate[i].person<<" ";
+            updateTotalTime(gate , gate[i].person , i);
+            cout<<"  Updated time is: "<<gate[i].total_time<<endl;
+        }
+        cout<<endl;
+        this_thread::sleep_for(chrono::minutes(1)); // function calling not activated 5 minutes
+}
+
+
+int allZero(Gate gate[] , int size)
+{
+    int sum = 0;
+    for(int i = 0 ; i<size ; i++)
+    {
+        if(gate[i].person!= 0)
+        {
+            return 0;
+        }
+    }
+    return 1;
 }
 
 
@@ -133,17 +189,18 @@ int main()
     }
     while(true)
     {
-        decrement(gate , N);
-        cout<<"Update Queue: ";
-        for(int i = 0 ; i<N ; i++)
-        {
-            cout<<"Person Left: "<<gate[i].person<<" ";
-            updateTotalTime(gate , gate[i].person , i);
-            cout<<"Updated time is: "<<gate[i].total_time<<endl;
-        }
-        cout<<endl;
-        this_thread::sleep_for(chrono::seconds(1)); // function calling not activated 5 minutes
+       if(sumofPeople!=M/2)
+       {
 
+       thread t1([&](){timerIncrement(gate , N , M/2);});
+       t1.join();
+       }
+       else
+       {
+           continue;
+       }
+       thread t2([&](){timerDecrement(gate,N);});
+       t2.join();
     }
     return 0;
 }
