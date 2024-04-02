@@ -163,7 +163,74 @@ int allZero(Gate gate[] , int size)
     return 1;
 }
 
+int getMaxTimedGate(Gate* gates[],int N){
+    int gate = 0;
+    int max_time = gates[0]->processing_time;
+    for(int i=1;i<N;i++){
+        if(EntryTimeCalculator(gates[i])>max_time){
+            max_time = EntryTimeCalculator(gates[i]);
+            gate = i;
+        }
+    }
+    return gate+1;
+}
 
+int getMinTimedGate(Gate* gates[],int N){
+    int gate = 0;
+    int min_time = gates[0]->processing_time;
+    for(int i=1;i<N;i++){
+        if(EntryTimeCalculator(gates[i])<min_time){
+            min_time = EntryTimeCalculator(gates[i]);
+            gate = i;
+        }
+    }
+    return gate+1;
+}
+
+int EntryTimeCalculator(Gate* G){       //Time for last person in the queue to enter the stadium
+    return (G->person*G->processing_time);
+}
+
+void switching(Gate* from,Gate* to,int switchers){
+    from->person -= switchers;
+    to->person += switchers;
+    cout<<"Switching done successfully\n";
+}
+
+void suggestSwitch(Gate* gates[],int N){
+    int gate1 = getMaxTimedGate(gates, N);
+    int gate2 = getMinTimedGate(gates, N);
+    int t1 = EntryTimeCalculator(gates[gate1]);
+    int t2 = EntryTimeCalculator(gates[gate2]);
+    int timeDiff = t1-t2;
+    if(timeDiff >= 10){
+        int group ;
+        for(int i=0;i<N;i++){
+            cout<<"People at Gate "<<i+1<<" are : "<<gates[i]->person<<"\t";
+            cout<<EntryTimeCalculator(gates[i])<<" minutes\n";
+        }
+        cout<<" people from Gate "<<gate1<<" should switch to Gate "<<gate2<<" to get Quicker Entry."<<endl;
+        cout<<"Anyone At Gate "<<gate1<<" is willing to Switch?(1/0) : \t";
+        int x;
+        cin>>x;
+        if(x == 1){
+            cout<<"How many NUmber of People Wants to Switch : ";
+            int z;
+            cin>>z;
+            switching(gates[gate1],gates[gate2],z);
+        }
+        else{
+            cout<<"They will regret.\n";
+        }
+    }
+    else{
+        for(int i=0;i<N;i++){
+            cout<<"People at Gate "<<i+1<<" are : "<<gates[i]->person<<"\t";
+            cout<<EntryTimeCalculator(gates[i])<<" minutes\n";
+        }
+        cout<<"No switching is required.\n";
+    }
+}
 
 int main()
 {
