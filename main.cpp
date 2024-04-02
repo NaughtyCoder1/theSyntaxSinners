@@ -7,7 +7,13 @@ using namespace std;
 
 
 int getRandomNumber(int minRange, int maxRange) {
-    return minRange + rand() % (maxRange - minRange + 1); // generates a random number within a certain range
+    std::random_device rd;  // Initialize random device
+    std::mt19937 gen(rd()); // Initialize Mersenne Twister pseudo-random number generator
+
+    // Create a uniform distribution for integers within the specified range
+    std::uniform_int_distribution<int> distribution(minRange, maxRange);
+
+    return distribution(gen); // Generate and return a random number
 }
 
 
@@ -70,15 +76,22 @@ void updateTotalTime(Gate gate[] , int person , int i) // updates total time
 }
 
 int sumofPeople = 0; //keeping track of the rest of M/2 people.
+int temp = 0;
 
 void timerIncrement(Gate *gate , int size , int people)
 {
-    int y = getRandomNumber(1,5);
+    if(sumofPeople == people)
+    {
+        cout<<"The rest of half of the people are also alloted."<<endl;
+        return;
+    }
+    int y = getRandomNumber(1,5); // number of people
+    int x = getRandomNumber(0,size-1); // gate number
     sumofPeople+=y;
-    cout<<"Sum of people is: "<<sumofPeople<<endl;
     if(sumofPeople<people)
     {
-        int x = getRandomNumber(0,size-1);
+        temp=sumofPeople;
+        cout<<"Sum of people is: "<<sumofPeople<<endl;
         cout<<endl<<"The number of person alloted are: "<<y<<"And gate alloted is: "<<x+1<<endl;
         gate[x].person += y;
          cout<<"The total person now are: "<<gate[x].person<<endl;
@@ -86,30 +99,27 @@ void timerIncrement(Gate *gate , int size , int people)
         cout<<"Updated time after increment is: "<<gate[x].total_time;
         cout<<endl;
     }
-    else if(sumofPeople == people)
-    {
-        cout<<"The rest of half of the people are also alloted."<<endl;
-        return;
-    }
     else
     {
-        int extra;
-        extra = sumofPeople - people;
+        int extra = 0;
+        extra = people - temp;
+        cout<<"updated Sum of people is: "<<sumofPeople<<endl;
+        sumofPeople = people;
         int x = getRandomNumber(0,size-1);
-        cout<<"The gate alloted is: "<<x<<"To "<<extra<<"People"<<endl;
+        cout<<"The gate alloted is: "<<x+1<<" To "<<extra<<"People"<<endl;
         gate[x].person +=extra;
         cout<<"The total person now are: "<<gate[x].person<<endl;
         updateTotalTime(gate , gate[x].person , x);
     }
-    this_thread::sleep_for(chrono::minutes(1));
+    this_thread::sleep_for(chrono::seconds(5));
 }
 
 void allocateTime(Gate gate[] , int size)
 {
     for(int i = 0 ; i<size ; i++)
     {
-        int p = getRandomNumber(1,2);
-        cout<<"Time for processing per person is: "<<p<<endl;
+        int p = getRandomNumber(1,3);
+        cout<<"Time for processing per person for gate: "<<i+1<<" is"<<p<<endl;
         gate[i].processing_time = p; // gate processing time gets alloacted randomly between 1 and 5 minutes , including both
         gate[i].total_time = gate[i].processing_time * gate[i].person;
     }
@@ -120,8 +130,6 @@ void decrement(Gate *gate, int size) // decrements the number of people in the Q
 {
     for(int i = 0 ; i<size ; i++)
    {
-
-
         if(gate[i].processing_time==1)
         {
             gate[i].person = max(0,gate[i].person-=2); // if 1 minute is take for 1 person than in  5 minutes 5 person will be processed
@@ -146,7 +154,7 @@ void timerDecrement(Gate *gate , int size)
             cout<<"  Updated time is: "<<gate[i].total_time<<endl;
         }
         cout<<endl;
-        this_thread::sleep_for(chrono::minutes(1)); // function calling not activated 5 minutes
+        this_thread::sleep_for(chrono::seconds(10)); // function calling not activated 5 minutes
 }
 
 
@@ -162,6 +170,66 @@ int allZero(Gate gate[] , int size)
     }
     return 1;
 }
+
+int getMaxIndex(Gate gate[] , int size) //returns the index of the gate having the most processing time
+{
+    int index = 0;
+    int maxTime = gate[0].total_time;
+    for(int i = 0 ; i<size ; i++)
+    {
+        if(gate[i].total_time > maxTime)
+        {
+            maxTime = gate[i].total_time;
+            index = i;
+        }
+    }
+    return index;
+}
+
+int getMinIndex(Gate gate[], int size)
+{
+    int index = 0;
+    int minTime = gate[0].total_time;
+    for(int i = 0 ; i<size ; i++)
+    {
+        if(gate[i].total_time < minTime)
+        {
+            minTime = gate[i].total_time;
+            index = i;
+        }
+    }
+    return index;
+}
+
+
+void switchGate(Gate gate[] , int size)
+{
+    while(true)
+    {
+        int minIndex = getMinIndex(gate , size);
+        int maxIndex = getMaxIndex(gate , size);
+        int minTime = gate[minIndex].total_time;
+        int maxTime = gate[maxIndex].total_time;
+
+        int threshold = maxTime - minTime;
+
+        if(threshold<=3)
+        {
+            break;
+        }
+
+        gate[maxIndex].person--;
+
+        gate[minIndex].person++;
+
+        updateTotalTime(gate , gate[maxIndex].person , maxIndex);
+        updateTotalTime(gate , gate[minIndex].person , minIndex);
+    }
+
+     cout<<"Switching Done successfully!!!"<<endl<<endl;
+
+}
+
 
 int main()
 {
@@ -187,19 +255,17 @@ int main()
     }
     while(true)
     {
-       if(sumofPeople!=M/2)
+        thread t1([&](){timerIncrement(gate , N , M/2);});
+        t1.join();
+        thread t2([&](){timerDecrement(gate,N);});
+        t2.join();
+       if(sumofPeople>=M/2&&allZero(gate,N))
        {
+           break;
+       }
 
-       thread t1([&](){timerIncrement(gate , N , M/2);});
-       t1.join();
-       }
-       else
-       {
-           continue;
-       }
-       thread t2([&](){timerDecrement(gate,N);});
-       t2.join();
+       switchGate(gate , N);
     }
+    cout<<endl<<endl<<"CODE successfully runned!!!!!";
     return 0;
 }
-
