@@ -52,15 +52,14 @@ void Random_Assign(Gate* gates,int people,int N){
     }
 }
 
-
 int calculateEntryTime(const Gate& gate) {
     return gate.size * gate.entryTime;
 }
 
-int getMaxTimedGate(Gate* gates, int numGates) {
+int getMaxTimedGate(Gate* gates, int N) {
     int maxTime = calculateEntryTime(gates[0]);
     int maxGate = 0;
-    for (int i = 1; i < numGates; ++i) {
+    for (int i = 1; i < N; ++i) {
         int currentTime = calculateEntryTime(gates[i]);
         if (currentTime > maxTime) {
             maxTime = currentTime;
@@ -87,16 +86,15 @@ void suggestSwitch(Gate* gates, int N) {
     int maxGate = getMaxTimedGate(gates, N);
     int minGate = getMinTimedGate(gates, N);
     int timeDifference = calculateEntryTime(gates[maxGate]) - calculateEntryTime(gates[minGate]);
-    if (timeDifference >= 10) {
+    if (timeDifference >= 10) {            // switching would be suggested only if there is some significant difference in entry times
         for(int i=0;i<N;i++){
             cout<<"time at gate "<<i+1<<" are "<<calculateEntryTime(gates[i])<<endl;
         }
         cout << "Switch people from Gate " << maxGate + 1 << " to Gate " << minGate + 1 << " for quicker entry." << std::endl;
-        cout << "Anyone at Gate " << maxGate + 1 << " is willing to Switch?(1/0) : \t";
+        cout << "Anyone at Gate " << maxGate + 1 << " is willing to Switch?(1 for yes/0 for no) : \t";
         int response;
         cin >> response;
         if (response == 1) {
-            // Switching logic
             int switchers;
             cout << "How many people want to switch: ";
             cin >> switchers;
@@ -113,15 +111,15 @@ void suggestSwitch(Gate* gates, int N) {
         }
     }
 }
-int checker=0;
+int checker=0;     // to keep a track on how many number of people entered in the stadium
 
 void Increment(Gate *gates,int people,int N){    // people = M/2 (half of the total people)
     if(checker<people){
-        int tempEntered = getRandomNumber(2,10);
-        int tempGate = getRandomNumber(0,N-1);
+        int tempEntered = getRandomNumber(2,10);   // random number of people entering the stadium at a time
+        int tempGate = getRandomNumber(0,N-1);    // random gate at which they will go
         gates[tempGate].size += tempEntered;
-        checker += tempEntered;
-        if(checker > people){
+        checker += tempEntered;                   // updating size of gates and checker
+        if(checker > people){                     // if more people entered than the expected total then further entry is prohibited 
             int extra = checker-people;
             gates[tempGate].size -= extra;
             checker = people;
@@ -143,7 +141,6 @@ void QueueManager(Gate* gates,int people,int N){
     }
 };
 
-
 int main() {
 
     int numGates, totalPeople;
@@ -151,32 +148,43 @@ int main() {
     cin >> numGates;
 
     Gate* gates = new Gate[numGates];
-    for (int i = 0; i < numGates; ++i) {
-        int processingTime;
-        cout << "Enter the processing time for Gate " << i + 1 << " (in minutes): ";
-        cin >> processingTime;
-        gates[i] = Gate(processingTime);
-    }
+    int processingTime;
+        int choice;
+        cout<<"Processing time for each entry gate is similar(enter 1) or different(enter 0): ";
+        cin>>choice;
+        if(choice == 1){
+            cout<<"Enter processing time: ";
+            cin>>processingTime;
+        }
+        else{
+            cout<< "Enter the processing time for Gate "<< i+1 << " (in minutes): ";
+            cin>>processingTime;
+            for(int i=0;i<numGates;i++){
+                gates[i]=Gate(processingTime);
+            }
+        }
 
     cout << "Enter the total number of people to be entered in the stadium: ";
     cin >> totalPeople;
 
     if (totalPeople > STADIUM_CAPACITY) {
-        cout << "Number of people exceeds stadium capacity." << std::endl;
+        cout << "Number of people exceeds stadium capacity." << endl;
         delete[] gates;
         return 0;
     }
-    if(totalPeople%2 == 0){
-        Random_Assign(gates, totalPeople/2, numGates);
-        suggestSwitch(gates,numGates);
-        QueueManager(gates, totalPeople/2, numGates);
-
-    }
     else{
-        Random_Assign(gates, (totalPeople+1)/2, numGates);
-        suggestSwitch(gates,numGates);
-        QueueManager(gates, (totalPeople+1)/2, numGates);
+        if(totalPeople%2 == 0){
+            Random_Assign(gates, totalPeople/2, numGates);
+            suggestSwitch(gates,numGates);
+            QueueManager(gates, totalPeople/2, numGates);
+        }
+        else{
+            Random_Assign(gates, (totalPeople+1)/2, numGates);
+            suggestSwitch(gates,numGates);
+            QueueManager(gates, (totalPeople+1)/2, numGates);
+        }
     }
+
     delete[] gates;
     return 0;
 }
