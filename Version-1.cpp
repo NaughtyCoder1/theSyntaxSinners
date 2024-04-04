@@ -8,7 +8,7 @@ using namespace std;
 
 int getRandomNumber(int minRange, int maxRange) {
     std::random_device rd;  // Initialize random device
-    std::mt19937 gen(rd()); // Initialize Mersenne Twister pseudo-random number generator
+    std::mt19937 gen(rd()); // Initialize pseudo-random number generator
 
     // Create a uniform distribution for integers within the specified range
     std::uniform_int_distribution<int> distribution(minRange, maxRange);
@@ -85,7 +85,7 @@ void timerIncrement(Gate *gate , int size , int people)
         cout<<"The rest of half of the people are also alloted."<<endl;
         return;
     }
-    int y = getRandomNumber(1,5); // number of people
+    int y = getRandomNumber(1,10); // number of people
     int x = getRandomNumber(0,size-1); // gate number
     sumofPeople+=y;
     if(sumofPeople<people)
@@ -111,7 +111,7 @@ void timerIncrement(Gate *gate , int size , int people)
         cout<<"The total person now are: "<<gate[x].person<<endl;
         updateTotalTime(gate , gate[x].person , x);
     }
-    this_thread::sleep_for(chrono::seconds(5));
+    this_thread::sleep_for(chrono::milliseconds(10));
 }
 
 void allocateTime(Gate gate[] , int size)
@@ -132,7 +132,7 @@ void decrement(Gate *gate, int size) // decrements the number of people in the Q
    {
         if(gate[i].processing_time==1)
         {
-            gate[i].person = max(0,gate[i].person-=2); // if 1 minute is take for 1 person than in  5 minutes 5 person will be processed
+            gate[i].person = max(0,gate[i].person-=3); // if 1 minute is take for 1 person than in  5 minutes 5 person will be processed
         }
       else
         {
@@ -154,7 +154,7 @@ void timerDecrement(Gate *gate , int size)
             cout<<"  Updated time is: "<<gate[i].total_time<<endl;
         }
         cout<<endl;
-        this_thread::sleep_for(chrono::seconds(10)); // function calling not activated 5 minutes
+        this_thread::sleep_for(chrono::milliseconds(10)); // function calling not activated 5 minutes
 }
 
 
@@ -202,28 +202,52 @@ int getMinIndex(Gate gate[], int size)
 }
 
 
-void switchGate(Gate gate[] , int size)
+void switchGate(Gate gate[] , int size , int person)
 {
+    int iteration = 0; // to keep track of iterations the loop is going in.
     while(true)
     {
         int minIndex = getMinIndex(gate , size);
         int maxIndex = getMaxIndex(gate , size);
         int minTime = gate[minIndex].total_time;
         int maxTime = gate[maxIndex].total_time;
+        cout<<"The gate with least time is: "<<minIndex+1<<" and the gate with the most time is: "<<maxIndex+1<<endl;
 
         int threshold = maxTime - minTime;
+        cout<<"Threshold time is: "<<threshold<<endl;
 
-        if(threshold<=3)
+        if(threshold<=2 || iteration >=10)
         {
             break;
         }
-
+        if(thresh)
+        if(threshold>=20)
+        {
+            gate[maxIndex].person -=5;
+            gate[minIndex].person +=5;
+        }
+        if(gate[maxIndex].person > person/4)
+        {
+            gate[maxIndex].person-=person/8;
+            gate[minIndex].person +=person/8;
+        }
+        else if(gate[maxIndex].person/4 > gate[minIndex].person)
+        {
+            int temp = gate[maxIndex].person/4;
+            gate[maxIndex].person -=temp;
+            gate[maxIndex].person +=temp;
+        }
+        else
+        {
         gate[maxIndex].person--;
-
         gate[minIndex].person++;
-
+        }
         updateTotalTime(gate , gate[maxIndex].person , maxIndex);
         updateTotalTime(gate , gate[minIndex].person , minIndex);
+        cout<<"The person on the gate "<<maxIndex+1 <<" are "<<gate[maxIndex].person<<endl;
+        cout<<"The person on the gate "<<minIndex+1 <<" are "<<gate[minIndex].person<<endl;
+        iteration++;
+
     }
 
      cout<<"Switching Done successfully!!!"<<endl<<endl;
@@ -264,9 +288,8 @@ int main()
            break;
        }
 
-       switchGate(gate , N);
+       switchGate(gate , N  , M/2);
     }
     cout<<endl<<endl<<"CODE successfully runned!!!!!";
     return 0;
 }
-
