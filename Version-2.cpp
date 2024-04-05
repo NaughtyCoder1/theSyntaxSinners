@@ -1,6 +1,5 @@
 #include <iostream>
 #include <cstdlib>
-#include <ctime>
 
 using namespace std;
 const int STADIUM_CAPACITY = 20000;
@@ -82,35 +81,55 @@ int getMinTimedGate(Gate* gates, int N) {
     return minGate;
 }
 
-void suggestSwitch(Gate* gates, int N) {
+void switching(Gate *from,Gate *to,int switchers){
+    from->size -= switchers;
+    to->size += switchers;
+    cout<<"Switching done successfully\n";
+}
+
+int suggestSwitch(Gate* gates,int N){
     int maxGate = getMaxTimedGate(gates, N);
     int minGate = getMinTimedGate(gates, N);
-    int timeDifference = calculateEntryTime(gates[maxGate]) - calculateEntryTime(gates[minGate]);
-    if (timeDifference >= 10) {            // switching would be suggested only if there is some significant difference in entry times
+    int t1 = gates[maxGate].entryTime*gates[maxGate].size;
+    int t2 = gates[minGate].entryTime*gates[minGate].size;
+    int timeDifference = t1-t2;
+    if(timeDifference >= 10){
         for(int i=0;i<N;i++){
-            cout<<"time at gate "<<i+1<<" are "<<calculateEntryTime(gates[i])<<endl;
+            cout<<"Gate "<<i+1<<" will take "<<calculateEntryTime(gates[i])<<" minutes."<<endl;
         }
-        cout << "Switch people from Gate " << maxGate + 1 << " to Gate " << minGate + 1 << " for quicker entry." << std::endl;
-        cout << "Anyone at Gate " << maxGate + 1 << " is willing to Switch?(1 for yes/0 for no) : \t";
+        int extra_people = timeDifference/gates[maxGate].entryTime;
+        int should_switch = extra_people / 2;
+        cout <<should_switch<< " People from Gate " << maxGate + 1 << " can Switch to Gate " << minGate + 1 << " for quicker entry." << std::endl;
+        cout << "Is anyone at Gate " << maxGate + 1 << " willing to Switch? (Enter 1 for yes/0 for no) : \t";
         int response;
         cin >> response;
-        if (response == 1) {
+        if(response == 1){
             int switchers;
             cout << "How many people want to switch: ";
             cin >> switchers;
-            gates[maxGate].size -= switchers;
-            gates[minGate].size += switchers;
-            cout << "Switching done successfully" << std::endl;
-        } else {
-            cout << "They will regret." << std::endl;
+           if(switchers <= should_switch || switchers < should_switch + 5){
+                switching(&gates[maxGate],&gates[minGate],switchers);
+            }
+            else{
+                cout<<"It is not Possible to Switch "<<switchers<<" People."<<endl;
+                cout<<"Approximately "<<should_switch<<" people can be Allowed to Gate."<<endl;
+            }
         }
-    } else {
-        cout << "No switching is required." << std::endl;
+        else{
+            cout<<"They will regret.\n";
+        }
+        return 0;
+    }
+    else{
         for(int i=0;i<N;i++){
-            cout<<"Final time at gate "<<i+1<<" is "<<calculateEntryTime(gates[i])<<endl;
+            cout<<"People at Gate "<<i+1<<" are : "<<gates[i].size<<"\t";
+            cout<<calculateEntryTime(gates[i])<<" minutes\n";
         }
+        cout<<"No switching is required.\n";
+        return -1;
     }
 }
+
 int checker=0;     // to keep a track on how many number of people entered in the stadium
 
 void Increment(Gate *gates,int people,int N){    // people = M/2 (half of the total people)
@@ -139,6 +158,9 @@ void QueueManager(Gate* gates,int people,int N){
         Increment(gates, people, N);
         suggestSwitch(gates,N);
     }
+    while(checker == people && suggestSwitch(gates,N)!=-1){
+        suggestSwitch(gates,N);
+    }
 };
 
 int main() {
@@ -155,12 +177,20 @@ int main() {
         if(choice == 1){
             cout<<"Enter processing time: ";
             cin>>processingTime;
+            if(processingTime <= 0){
+                cout<<"Invalid Input!\nTry again.\n";
+                cout<<"Enter processing time: ";
+                cin>>processingTime;
+            }
+            for(int i=0;i<numGates;i++){
+                gates[i] = Gate(processingTime);
+            }
         }
         else{
-            cout<< "Enter the processing time for Gate "<< i+1 << " (in minutes): ";
-            cin>>processingTime;
             for(int i=0;i<numGates;i++){
-                gates[i]=Gate(processingTime);
+                cout<< "Enter the processing time for Gate "<< i+1 << " (in minutes): ";
+                cin>>processingTime;
+                gates[i] = Gate(processingTime);
             }
         }
 
@@ -184,8 +214,9 @@ int main() {
             QueueManager(gates, (totalPeople+1)/2, numGates);
         }
     }
-
+    cout<<"Thank you.\n";
     delete[] gates;
     return 0;
 }
+
 
