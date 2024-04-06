@@ -7,10 +7,7 @@ using namespace std;
 
 
 int getRandomNumber(int minRange, int maxRange) {
-    static random_device rd;
-    static mt19937 gen(rd());
-    uniform_int_distribution<int> distribution(minRange, maxRange);
-    return distribution(gen);
+    return minRange + rand() % (maxRange - minRange + 1);
 }
 
 struct Gate
@@ -361,3 +358,4 @@ int main()
     cout<<endl<<endl<<"CODE successfully runned!!!!!";
     return 0;
 }
+
