@@ -7,16 +7,11 @@ using namespace std;
 
 
 int getRandomNumber(int minRange, int maxRange) {
-    std::random_device rd;  // Initialize random device
-    std::mt19937 gen(rd()); // Initialize pseudo-random number generator
-
-    // Create a uniform distribution for integers within the specified range
-    std::uniform_int_distribution<int> distribution(minRange, maxRange);
-
-    return distribution(gen); // Generate and return a random number
+    static random_device rd;
+    static mt19937 gen(rd());
+    uniform_int_distribution<int> distribution(minRange, maxRange);
+    return distribution(gen);
 }
-
-
 
 struct Gate
 {
@@ -85,7 +80,7 @@ void timerIncrement(Gate *gate , int size , int people)
         cout<<"The rest of half of the people are also alloted."<<endl;
         return;
     }
-    int y = getRandomNumber(1,10); // number of people
+    int y = getRandomNumber(10,20); // number of people
     int x = getRandomNumber(0,size-1); // gate number
     sumofPeople+=y;
     if(sumofPeople<people)
@@ -132,11 +127,11 @@ void decrement(Gate *gate, int size) // decrements the number of people in the Q
    {
         if(gate[i].processing_time==1)
         {
-            gate[i].person = max(0,gate[i].person-=3); // if 1 minute is take for 1 person than in  5 minutes 5 person will be processed
+            gate[i].person = max(0,gate[i].person-=3); // if 1 minute is take for 1 person than in  3 minutes 3 person will be processed
         }
       else
         {
-             gate[i].person = max(0,gate[i].person-= 1); // if 5 minute is taken to process , then 1 will be processed in 5 minutes
+             gate[i].person = max(0,gate[i].person-= 1); // if 2 or 3 minute is taken to process , then 1 will be processed in 3 minutes
         }
 
    }
@@ -216,32 +211,67 @@ void switchGate(Gate gate[] , int size , int person)
         int threshold = maxTime - minTime;
         cout<<"Threshold time is: "<<threshold<<endl;
 
-        if(threshold<=2 || iteration >=10)
+        if(threshold<=4 || iteration >=10)
         {
             break;
         }
-        if(thresh)
-        if(threshold>=20)
+        if(threshold >= 90)
         {
-            gate[maxIndex].person -=5;
-            gate[minIndex].person +=5;
+            gate[maxIndex].person -=15;
+            gate[minIndex].person += 15;
         }
-        if(gate[maxIndex].person > person/4)
+        else if(threshold >= 45)
         {
-            gate[maxIndex].person-=person/8;
-            gate[minIndex].person +=person/8;
+            gate[maxIndex].person -=11;
+            gate[minIndex].person += 11;
         }
-        else if(gate[maxIndex].person/4 > gate[minIndex].person)
+        else if(threshold>=30)
         {
-            int temp = gate[maxIndex].person/4;
-            gate[maxIndex].person -=temp;
-            gate[maxIndex].person +=temp;
+            gate[maxIndex].person -=9;
+            gate[minIndex].person +=9;
+        }
+        else if(threshold>=24)
+        {
+            gate[maxIndex].person -=6;
+            gate[minIndex].person +=6;
+        }
+        else if(threshold>=18)
+        {
+            gate[maxIndex].person -=4;
+            gate[minIndex].person +=4;
         }
         else
         {
         gate[maxIndex].person--;
         gate[minIndex].person++;
         }
+
+
+        if(gate[minIndex].person == 0)
+        {
+            int temp = gate[maxIndex].person/2;
+            gate[maxIndex].person -=temp;
+            gate[minIndex].person +=temp;
+
+        }
+        else if(gate[maxIndex].person > person/4)
+        {
+            gate[maxIndex].person-=person/8;
+            gate[minIndex].person +=person/8;
+        }
+        else if(gate[maxIndex].person/2  > gate[minIndex].person)
+        {
+            int temp = gate[maxIndex].person/2;
+            gate[maxIndex].person -= temp;
+            gate[minIndex].person += temp;
+        }
+        else if(gate[maxIndex].person/4 > gate[minIndex].person)
+        {
+            int temp = gate[maxIndex].person/4;
+            gate[maxIndex].person -=temp;
+            gate[minIndex].person +=temp;
+        }
+
         updateTotalTime(gate , gate[maxIndex].person , maxIndex);
         updateTotalTime(gate , gate[minIndex].person , minIndex);
         cout<<"The person on the gate "<<maxIndex+1 <<" are "<<gate[maxIndex].person<<endl;
