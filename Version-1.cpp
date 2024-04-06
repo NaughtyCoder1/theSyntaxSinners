@@ -1,3 +1,4 @@
+
 #include<iostream>
 #include<chrono>
 #include<cmath>
@@ -7,7 +8,10 @@ using namespace std;
 
 
 int getRandomNumber(int minRange, int maxRange) {
-    return minRange + rand() % (maxRange - minRange + 1);
+    static random_device rd;
+    static mt19937 gen(rd());
+    uniform_int_distribution<int> distribution(minRange, maxRange);
+    return distribution(gen);
 }
 
 struct Gate
@@ -358,4 +362,3 @@ int main()
     cout<<endl<<endl<<"CODE successfully runned!!!!!";
     return 0;
 }
-
