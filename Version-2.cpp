@@ -241,6 +241,7 @@ int main(){
         }
 
         cout<<"THANK YOU.\n";
+        delete gates;
         return 0;
     }
 }
