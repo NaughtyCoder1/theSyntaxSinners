@@ -211,10 +211,6 @@ void EntryManager(Gate* gates,int halfpeople,int N){    // to manage the increme
         suggestSwitch(gates,N);
         Decrement(gates,N,timerDecrement);
     }                                                  
-    while(checker == halfpeople && suggestSwitch(gates,N) != -1){      // suggesting switching after all the people entered into gates
-        suggestSwitch(gates,N);
-        Decrement(gates,N,timerDecrement);
-    }
 }
 
 int main(){
@@ -268,7 +264,7 @@ int main(){
             Random_Assign(gates, Totalpeople/2, Totalgates);
             suggestSwitch(gates,Totalgates);
             EntryManager(gates, Totalpeople/2, Totalgates);
-            TotalTimeTaken += gates[getMaxIndex(gates, Totalgates)].entryTime;
+            TotalTimeTaken += EntryTimeCalc(gates[getMaxIndex(gates,Totalgates)]);
             cout<<"Total time taken to enter all the people : "<<TotalTimeTaken<<endl;
         }
         else{
@@ -276,7 +272,7 @@ int main(){
             Random_Assign(gates, (Totalpeople+1)/2, Totalgates);
             suggestSwitch(gates,Totalgates);
             EntryManager(gates, (Totalpeople+1)/2, Totalgates);
-            TotalTimeTaken += gates[getMaxIndex(gates, Totalgates)].entryTime;
+            TotalTimeTaken += EntryTimeCalc(gates[getMaxIndex(gates,Totalgates)]);
             cout<<"Total time taken to enter all the people : "<<TotalTimeTaken<<" minutes."<<endl;
         }
         cout<<"THANK YOU.\n";
