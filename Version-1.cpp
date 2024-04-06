@@ -86,25 +86,24 @@ void timerIncrement(Gate *gate , int size , int people)
     if(sumofPeople<people)
     {
         temp=sumofPeople;
-        cout<<"Sum of people is: "<<sumofPeople<<endl;
-        cout<<endl<<"The number of person alloted are: "<<y<<"And gate alloted is: "<<x+1<<endl;
+        cout<<endl<<"The number of person alloted are: "<<y<<" And gate alloted is: "<<x+1<<endl;
         gate[x].person += y;
-         cout<<"The total person now are: "<<gate[x].person<<endl;
+        cout<<"The total person now are: "<<gate[x].person<<endl;
         updateTotalTime(gate , gate[x].person , x);
         cout<<"Updated time after increment is: "<<gate[x].total_time;
-        cout<<endl;
+        cout<<endl<<endl;
     }
     else
     {
         int extra = 0;
         extra = people - temp;
-        cout<<"updated Sum of people is: "<<sumofPeople<<endl;
         sumofPeople = people;
         int x = getRandomNumber(0,size-1);
-        cout<<"The gate alloted is: "<<x+1<<" To "<<extra<<"People"<<endl;
+        cout<<"The number of person alloted are: "<<extra<<" And gate alloted is: "<<x+1<<endl;
         gate[x].person +=extra;
         cout<<"The total person now are: "<<gate[x].person<<endl;
         updateTotalTime(gate , gate[x].person , x);
+        cout<<"Updated time after increment is: "<<gate[x].total_time;
     }
     this_thread::sleep_for(chrono::milliseconds(10));
 }
@@ -201,22 +200,28 @@ void switchGate(Gate gate[] , int size , int person)
 {
     int iteration = 0; // to keep track of iterations the loop is going in.
     int temp1 = getMaxIndex(gate,size) ; // to ensure switching done between two same gates.
-    int temp2 = 0; // to ensure no collison . temp2 = minIndex.
+    int temp2 = getMinIndex(gate,size); // to ensure no collison . temp2 = minIndex.
+    cout<<"The gate with most time is: "<<temp1+1<<" and the gate with the least time is: "<<temp2+1<<endl;
     int temp3 = 0; //to ensure no collision. temp3 = maxIndex.
+    int temp4 = temp1;
+    int temp5 = temp2;
     int checker = 0;
+    int choice = 0;
+    cout<<"Are people interested in switching gates?(0/1) ";
+    cin>>choice;
+    if(choice == 1)
+    {
     while(true)
     {
         int minIndex = getMinIndex(gate , size);
         int maxIndex = getMaxIndex(gate , size);
         int minTime = gate[minIndex].total_time;
         int maxTime = gate[maxIndex].total_time;
-        cout<<"The gate with least time is: "<<minIndex+1<<" and the gate with the most time is: "<<maxIndex+1<<endl;
 
-        int threshold = maxTime - minTime;
-        cout<<"Threshold time is: "<<threshold<<endl;
+
         if(temp1!=maxIndex)
         {
-            cout<<"Temp1 is not equal to new max index."<<endl;
+            cout<<"No need of switching"<<endl;
             break;
         }
         if(checker == 1)
@@ -224,59 +229,64 @@ void switchGate(Gate gate[] , int size , int person)
          checker = 0;
         if(temp2 == maxIndex && temp3 == minIndex)
         {
-            cout<<"Collisions might occur so stopping."<<endl;
+            cout<<"No need of switching."<<endl;
             break;
         }
         }
+
+        if(gate[minIndex].person == 0)
+        {
+            int temp = gate[maxIndex].person/3;
+            gate[maxIndex].person -=temp;
+            gate[minIndex].person +=temp;
+            updateTotalTime(gate,gate[maxIndex].person , maxIndex);
+            updateTotalTime(gate,gate[minIndex].person , minIndex);
+
+        }
+        int threshold = maxTime - minTime;
         if(threshold<=4 || iteration >=10)
         {
-            break;
+           if(threshold <= 4)
+           {
+               cout<<"Switching Done successfully."<<endl;
+           }
         }
         if(threshold >= 90)
         {
-            gate[maxIndex].person -=12;
+            gate[maxIndex].person -= 12;
             gate[minIndex].person += 12;
         }
         else if(threshold >= 45)
         {
-            gate[maxIndex].person -=9;
-            gate[minIndex].person += 19;
+            gate[maxIndex].person -= 9;
+            gate[minIndex].person += 9;
         }
         else if(threshold>=30)
         {
-            gate[maxIndex].person -=7;
-            gate[minIndex].person +=7;
+            gate[maxIndex].person -= 7;
+            gate[minIndex].person += 7;
         }
         else if(threshold>=24)
         {
-            gate[maxIndex].person -=6;
-            gate[minIndex].person +=6;
+            gate[maxIndex].person -= 6;
+            gate[minIndex].person += 6;
         }
         else if(threshold>=18)
         {
-            gate[maxIndex].person -=4;
-            gate[minIndex].person +=4;
+            gate[maxIndex].person -= 4;
+            gate[minIndex].person += 4;
         }
         else if(threshold >=9)
         {
-            gate[maxIndex].person -=2;
-            gate[minIndex].person +=2;
+            gate[maxIndex].person -= 2;
+            gate[minIndex].person += 2;
         }
         else
         {
             gate[maxIndex].person--;
-               gate[minIndex].person++;
+            gate[minIndex].person++;
         }
-
-
-        if(gate[minIndex].person == 0)
-        {
-            int temp = gate[maxIndex].person/2;
-            gate[maxIndex].person -=temp;
-            gate[minIndex].person +=temp;
-
-        }
-        else if(gate[maxIndex].person/2  > gate[minIndex].person)
+        if(gate[maxIndex].person/2  > gate[minIndex].person)
         {
             int temp = gate[maxIndex].person/4;
             gate[maxIndex].person -= temp;
@@ -291,8 +301,6 @@ void switchGate(Gate gate[] , int size , int person)
 
         updateTotalTime(gate , gate[maxIndex].person , maxIndex);
         updateTotalTime(gate , gate[minIndex].person , minIndex);
-        cout<<"The person on the gate "<<maxIndex+1 <<" are "<<gate[maxIndex].person<<endl;
-        cout<<"The person on the gate "<<minIndex+1 <<" are "<<gate[minIndex].person<<endl;
         iteration++;
         temp1 = maxIndex;
         temp2 = minIndex;
@@ -300,8 +308,17 @@ void switchGate(Gate gate[] , int size , int person)
         checker = 1;
 
     }
+    cout<<"The person on the gate "<<temp4+1 <<" are "<<gate[temp4].person<<endl;
+    cout<<"The person on the gate "<<temp5+1 <<" are "<<gate[temp5].person<<endl;
 
      cout<<"Switching Done successfully!!!"<<endl<<endl;
+    }
+
+   else
+   {
+       cout<<"They will regret.¯\(:/)/¯";
+       return;
+   }
 
 }
 
