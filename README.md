@@ -42,32 +42,6 @@ Important Note: We have Submitted 2 Version of Our Program. Both of them have sa
     condition if they do not want to switch. In this case the program continues and peoples are assigned after the suggestion. This program 
     will run till the time at each gate is not nearly same or have very small difference.
 
-
-##Addtional Features in both the Versions:
-
-Version 1:
-
-      In this version we have added several functions which helps the program to run with the time. We used the chrono library which help to provide a real time update of 
-      increment and decrement of the people on each gate.
-
-
-version 2:
-
-      In this version we have tried to simplify the things in the program. In version 1 we have used the chrono and thread library to run the program with the time. Here we   
-      are not using any other library to do such thing. The main difference between both the version is in the switching function. In this version the switching done by the 
-      user by suggesting each and every person whether they want to switch or not. This also goes with the time in the different way user have to enter the input 
-      every time till all the gates have nearly same time to push all the people thought the gate to enter the stadium. In this code the people
-      are not entering through the gates. The switching and increment are happening while they are standing in the queue. While in the version 1 the 
-      people in the Queue are also passing through the gates and entering the stadium. The advantage of this version is that is easy to understand and
-      implement.
-
-##Conclusion:
-
-      In both the version the code is minimizing the time of the gates through which they are going to enter. This code helps the Queue 
-      Manager in the Stadium or at any place to manage the people and help them to get the quicker entry. This will also help them to easily handle the crowd. Our program is 
-      able to handle large input also. But make sure that larger the input the user enters larger the time will be taken by the code to reach the final output. In version-1 the 
-      code runs automatically and with respect to the time gates have.
-
 ##Contribution:
   We came up with idea of both versions in group discussions which happened almost regularly. Initially, we came up with idea of version-1 and started coding and later, we 
   came up with idea for version-2, where in certain changes as discussed above were made. Due to shortage of time, we divided in pair of duos coded both versions  
