@@ -54,6 +54,8 @@ Important Note: We have Submitted 2 Version of Our Program. Both of them have sa
   concurrently. However, it was all done during group meetings. This approach ensured that we discussed and incorporated ideas of every member in the code. 
 
    1) Jeet Daiya - NaughtyCoder1
+
+
      - Researched about how to increment and decrement people in real time and came up with <thread> and <chrono> header files and their functions which were to be 
        implemented in the code
      - Coded the parts consisting of these functions.
@@ -65,6 +67,8 @@ Important Note: We have Submitted 2 Version of Our Program. Both of them have sa
      - Wrote description in the document.
        
    2) Raj Makwana - NaughtyCoder2
+
+
      - Implemented updateTotalTime() function.
      - Implemented decrement() function.
      - Implemented getMinIndex() ,getMaxIndex() and allZero() function.
@@ -73,6 +77,8 @@ Important Note: We have Submitted 2 Version of Our Program. Both of them have sa
      - Wrote psuedocode in the document file.
        
    3) Dhruv Gohil - NaughtyCoder3
+
+
      - Implmented allocateTime() functions.
      - Implemented suggestSwitch() function.
      - Implemented switching() function.
@@ -82,6 +88,8 @@ Important Note: We have Submitted 2 Version of Our Program. Both of them have sa
      - Suggested some changes in the switchGate() function for version-1.
     
    4) Neel Shah - NaughtyCoder4
+
+
      - Implemented randomAssign() function along with Dhruv.
      - Implemented queueManager() function.
      - Formatted output.
