@@ -7,7 +7,7 @@ Important Note : We have Submitted 2 Version of Our Program.Both of them have sa
 ##About the Version 1:
   Important Note : Please use C++14 or above version and compile code using Code::Blocks as it uses windows terminal for code. The code consists of lines which helps clear 
   the terminal of code at some places.
-    About Functionality of the code: 
+    #About Functionality of the code: 
    
     We implemented this code with the help of Array Data Structure.
     
