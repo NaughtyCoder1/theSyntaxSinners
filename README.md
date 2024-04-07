@@ -51,4 +51,48 @@ version 2:
       we have used the chrono and thread library to run the program with the time. Here we are not using any other library to do such thing. 
       The main difference between both the version is in the switching function.In this version the switching done by the user by suggesting 
       each and every person whether they want to switch or not.This also goes with the time in the different way user have to enter the input 
-      every time till all the gates have nearly same time to push all the people thought the gate to enter the stadium.
+      every time till all the gates have nearly same time to push all the people thought the gate to enter the stadium.In this code the peoples
+      are not entering through the gates.The switching and all are happening while they are standing in the queue.While in the version 1 the the 
+      people in the Queue are also passin through the gates and entering the stadium.The advantage of this version is that is easy to understand 
+      it very easy to implement.
+
+##Assumptions:
+
+Version 1:
+
+
+Version 2:
+
+      1)The output of the code is designed considering a person is handling the software.
+      2)The people who agreed to switch are switched till required conditions are not met according to the algorithm. 
+      3)No individual consent for switching is taken, the switching is done if a majority is agreeing to switch.
+      4)The consent is assumed to reach the handler using some mode of communication (e.g. some employee on ground.)
+      5)To make it more real time, the p minutes(i.e processing time per person at each gate) is taken randomly within a certain range. In real 
+      time the people who will check will not take uniform time.
+      6)The rest of M/2 people who will enter are made to enter at random time at a random gate, as in real life, people won't enter in the same amount and at the same gate.
+      7)To mimic server refresh/lag, the updates are displayed with some delay.
+
+##Conclution:
+
+      In this both the version the code in minimizing the time of the gates through which they are going to enter.This codes helps the Queue 
+      Manager in the Stadium to manage the people and help them to get the quicker entry.Code will help them that how many people should 
+      move from which gate to whiuch gate.This will also help them to easily handle the crowd.Our program is able to handle the large input also.
+      But make sure that the bigger the input the user enter the time will be taken by the code to reach the final output.In version one the code
+      run automatically and wwith respec to the time user have entered.
+
+##Contribution:
+
+Version 1:
+
+    The idea of this version was firstly came in the mind of our captain jeet while the brainstroming session of our group.Then the implemnetation is
+    done by the willingness of the whole group.
+
+    Jeet Dahiya(Captain) : He brought the idea of chrono and thread and its implementation.He and Raj also made an switching function.
+    Dhruv Gohil : He made the increment and decrement function and let the people in the queue can go through the gates.
+    Neel Shah : He made the Random Assignment function in the code.
+    Raj Makwana : He and jeet made the Switching function.
+
+Version 2:
+
+    This
+
