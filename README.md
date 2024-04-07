@@ -16,6 +16,8 @@ Important Note: We have Submitted 2 Version of Our Program. Both of them have sa
 ##About the Version 1:
   Important Note: Please use C++-14 or above version and compile code using Code::Blocks as it uses windows terminal for code. The code consists of lines which helps clear 
   the terminal of code at some places.
+
+  Use ID : "rygbeeRAx" and Password : "12121980"
     
   About Functionality of the code: 
    
@@ -51,11 +53,46 @@ Important Note: We have Submitted 2 Version of Our Program. Both of them have sa
   came up with idea for version-2, where in certain changes as discussed above were made. Due to shortage of time, we divided in pair of duos coded both versions  
   concurrently. However, it was all done during group meetings. This approach ensured that we discussed and incorporated ideas of every member in the code. 
 
-  1) Jeet Daiya
+   1) Jeet Daiya - NaughtyCoder1
      - Researched about how to increment and decrement people in real time and came up with <thread> and <chrono> header files and their functions which were to be 
        implemented in the code
-     - Coded the parts consisting of these functions
-     - 
+     - Coded the parts consisting of these functions.
+     - Implemented checkPassword() function.
+     - Designed switchGate() function along with all the members.
+     - Implemented timeIncrement() and timerDecrement() function with Raj.
+     - Formatted Output.
+     - Analyzed time and space complexity with Raj.
+     - Wrote description in the document.
+       
+   2) Raj Makwana - NaughtyCoder2
+     - Implemented updateTotalTime() function.
+     - Implemented decrement() function.
+     - Implemented getMinIndex() ,getMaxIndex() and allZero() function.
+     - Made significant changes in switchGate() function and improved efficiency.
+     - Added comments.
+     - Wrote psuedocode in the document file.
+       
+   3) Dhruv Gohil - NaughtyCoder3
+     - Implmented allocateTime() functions.
+     - Implemented suggestSwitch() function.
+     - Implemented switching() function.
+     - Improved queueManager() function.
+     - Added comments and made code more readable.
+     - Wrote the psuedocode in the document.
+     - Suggested some changes in the switchGate() function for version-1.
+    
+   4) Neel Shah - NaughtyCoder4
+     - Implemented randomAssign() function along with Dhruv.
+     - Implemented queueManager() function.
+     - Formatted output.
+     - Implemented increment() function.
+     - Helped in suggestSwitch() function.
+     - Made code more readable by changing variable names.
+     - Analyzed time and space complexity.
+     - Wrote Description in the document.
+     - Tried to implement decrement function in version-2 but failed unforutnately.
+      
+     
 
 
 
