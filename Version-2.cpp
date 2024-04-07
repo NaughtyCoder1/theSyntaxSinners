@@ -1,5 +1,4 @@
 // Assuming that the code is being used by some entry manager and not by the people which are entering
-// Assuming that in every 2 minutes new people entering during increment function and switching function takes 2 minutes
 
 #include<iostream>
 #include<cstdlib>
@@ -56,17 +55,17 @@ void Random_Assign(Gate* gates,int people,int N){   // to randomly assign first 
     }
 }
 
-float EntryTimeCalc(Gate &gates){    
+float calculateEntryTime(Gate &gates){    
     return gates.size*gates.entryTime;
 }
 
 int getMinIndex(Gate* gates,int N){     // to get index of the gate which gives entry in minimum time
     int minIndex = 0;
-    float minTime = EntryTimeCalc(gates[0]);
+    float minTime = calculateEntryTime(gates[0]);
 
     for(int i=1;i<N;i++){
-        if(EntryTimeCalc(gates[i]) < minTime){
-            minTime = EntryTimeCalc(gates[i]);
+        if(calculateEntryTime(gates[i]) < minTime){
+            minTime = calculateEntryTime(gates[i]);
             minIndex = i;
         }
     }
@@ -75,40 +74,35 @@ int getMinIndex(Gate* gates,int N){     // to get index of the gate which gives 
 
 int getMaxIndex(Gate* gates,int N){      // to get index of the gate which gives entry in maximum time
     int maxIndex = 0;
-    float maxTime = EntryTimeCalc(gates[0]);
+    float maxTime = calculateEntryTime(gates[0]);
 
     for(int i=1;i<N;i++){
-        if(EntryTimeCalc(gates[i]) > maxTime){
-            maxTime = EntryTimeCalc(gates[i]);
+        if(calculateEntryTime(gates[i]) > maxTime){
+            maxTime = calculateEntryTime(gates[i]);
             maxIndex = i;
         }
     }
     return maxIndex;
 }
 
-float TotalTimeTaken = 0;      // to keep updating time taken to enter the people
-float timerDecrement = 0;      // time for decrement function to decrease people through entry gates
-
 void switching(Gate* from,Gate* to,int switchers){     
 
     from->size -= switchers;
     to->size += switchers;
     cout<<"Switching Done Successfully.\n";
-    TotalTimeTaken += 2;
-    timerDecrement += 2;
 }
 
 int suggestSwitch(Gate* gates,int N){             // to suggest that how many people should switch from which gate to which gate
 
     int MaxIndex = getMaxIndex(gates,N);
     int MinIndex = getMinIndex(gates,N);
-    float TimeDiff = EntryTimeCalc(gates[MaxIndex]) - EntryTimeCalc(gates[MinIndex]);
+    float TimeDiff = calculateEntryTime(gates[MaxIndex]) - calculateEntryTime(gates[MinIndex]);
 
     if(TimeDiff >= 10){    // switching is required only if there is significant time difference between two gates
 
         cout<<endl;
         for(int i=0;i<N;i++){
-            cout<<"Gate "<<i+1<<" will take "<< EntryTimeCalc(gates[i]) <<" minutes.\n";
+            cout<<"Gate "<<i+1<<" will take "<<calculateEntryTime(gates[i])<<" minutes.\n";
         }
         cout<<endl;
 
@@ -125,14 +119,14 @@ int suggestSwitch(Gate* gates,int N){             // to suggest that how many pe
             cout<<"How many people are ready to switch: ";
             cin>>switchers;
 
-            if(switchers <= should_switch || switchers < should_switch+5){   // switching will be done in these conditions only
+            if(switchers <= should_switch || switchers <= should_switch+5){   // switching will be done in these conditions only
                                                                                 
                 switching(&gates[MaxIndex],&gates[MinIndex],switchers);
             }
             else{
 
                 cout<<"Not possible to switch "<<switchers<<" people to Gate "<<MinIndex+1<<endl;
-                cout<<"Maximum "<<should_switch+5<<" people can be allowed.\n";
+                cout<<"Aroud 5 people more than "<<should_switch<<" can be allowed.\n";
             }
         }
         else{
@@ -144,7 +138,7 @@ int suggestSwitch(Gate* gates,int N){             // to suggest that how many pe
     else{
 
         for(int i=0;i<N;i++){
-            cout<<"Gate "<<i+1<<" will take "<<EntryTimeCalc(gates[i])<<" minutes.\n";
+            cout<<"Gate "<<i+1<<" will take "<<calculateEntryTime(gates[i])<<" minutes.\n";
         }
 
         cout<<"\nNo switching is required.\n"<<endl;
@@ -165,13 +159,9 @@ void Increment(Gate* gates,int halfpeople,int N){         // remaining half peop
             gates[gateIndex].size -= extra;
             checker = halfpeople;
             cout<<"Rest of the half people are entered in the gates.\n";
-            TotalTimeTaken += 2;
-            timerDecrement += 2;
             return;
         }
         cout<<Entered<<" people entered in Gate "<<gateIndex+1<<endl;
-        TotalTimeTaken += 2;
-        timerDecrement += 2;
     }
     else if(checker == halfpeople){
         cout<<"Rest of the half people are entered in the gates.\n";
@@ -179,45 +169,21 @@ void Increment(Gate* gates,int halfpeople,int N){         // remaining half peop
     }
 }
 
-void Decrement(Gate* gates, int N,float time){       
-    for(int i=0;i<N;i++){
-        int madeEntry = (time/gates[i].entryTime);
-        if(madeEntry <= 0){
-            timerDecrement = 0;
-            break;
-        }
-        else{
-            if(gates[i].size == 0){
-                cout<<"Gate "<<i+1<<" is Empty.\n";
-            }
-            else if(gates[i].size <= madeEntry){
-                int entered = madeEntry - gates[i].size;
-                gates[i].size = 0;
-                cout<<entered<<" people made entry into the stadium through Gate "<<i+1<<endl;
-            }
-            else{
-                gates[i].size -= madeEntry;
-                cout<<madeEntry<<" people made entry into the stadium through Gate "<<i+1<<endl;
-            }
-        }
-    }
-    cout<<endl;
-    timerDecrement = 0;
-}
-
 void EntryManager(Gate* gates,int halfpeople,int N){    // to manage the increment and suggest switch function 
     while(checker != halfpeople){
         Increment(gates,halfpeople,N);
         suggestSwitch(gates,N);
-        Decrement(gates,N,timerDecrement);
     }                                                  
+    while(checker == halfpeople && suggestSwitch(gates,N) != -1){      // suggesting switching after all the people entered into gates
+        suggestSwitch(gates,N);
+    }
 }
 
 int main(){
     int Totalpeople,Totalgates;
     cout<<"Enter total number of people to be entered in the stadium: ";
     cin>>Totalpeople;
-    
+
     if(Totalpeople > MaxCapacity){
 
         cout<<"Insufficient Stadium Capacity!!\n";
@@ -228,7 +194,9 @@ int main(){
 
         cout<<"Enter total number of entry gates available in the stadium: ";
         cin>>Totalgates;
+
         Gate* gates = new Gate[Totalgates];
+
         int response;
         float processingTime;
         cout<<"Processing time for each entry gate is similar(enter 1) or different(enter 0)? : ";
@@ -264,19 +232,15 @@ int main(){
             Random_Assign(gates, Totalpeople/2, Totalgates);
             suggestSwitch(gates,Totalgates);
             EntryManager(gates, Totalpeople/2, Totalgates);
-            TotalTimeTaken += EntryTimeCalc(gates[getMaxIndex(gates,Totalgates)]);
-            cout<<"Total time taken to enter all the people : "<<TotalTimeTaken<<endl;
         }
         else{
 
             Random_Assign(gates, (Totalpeople+1)/2, Totalgates);
             suggestSwitch(gates,Totalgates);
             EntryManager(gates, (Totalpeople+1)/2, Totalgates);
-            TotalTimeTaken += EntryTimeCalc(gates[getMaxIndex(gates,Totalgates)]);
-            cout<<"Total time taken to enter all the people : "<<TotalTimeTaken<<" minutes."<<endl;
         }
+
         cout<<"THANK YOU.\n";
-        delete gates;
         return 0;
     }
 }
