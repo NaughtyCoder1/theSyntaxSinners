@@ -4,11 +4,84 @@
 #include<random>
 #include<thread>
 using namespace std;
-struct Gate;
-int allZero(Gate gate[] , int size);
 
+struct Gate;//Forward Declaration of struct
+int allZero(Gate gate[] , int size);//Forward Declaration of the function
+
+//Function to generate random number.
 int getRandomNumber(int minRange, int maxRange) {
     return minRange + rand() % (maxRange - minRange + 1);
+}
+
+//function which ensures password proctection
+int checkPassword()
+{
+    string userId;
+    cout << "ENTER YOUR ID: "; // ID is rygbeeRAx
+    getline(cin, userId); // Use getline to read the entire line
+    if (userId != "rygbeeRAx")
+    {
+        cout << "Enter the ID correctly." << endl;
+        cout << "You have 4 chances left." << endl;
+        for (int i = 1; i <= 4; i++) // Change the loop limit to 3 to allow 4 attempts
+        {
+            cout<<"Entering the ID: ";
+            getline(cin, userId); // Use getline to read the entire line
+            if (userId == "rygbeeRAx")
+            {
+                break;
+            }
+            else
+            {
+                cout << "You have " << 4 - i << " chances left." << endl;
+                if(i==4)
+                 {
+                     cout << "ID attempt limit reached. Closing the program." << endl;
+                     return 0; // If four attempts are done the program returns zero and terminates the entire software.
+                 }
+            }
+        }
+
+
+    }
+
+    string password;
+    cout << "ENTER YOUR PASSWORD: ";
+    getline(cin, password); // Use getline to read the entire line
+    if (password != "12121980")
+    {
+        cout << "Enter the password correctly." << endl;
+        cout << "You have 4 chances left." << endl;
+        for (int i = 1; i <= 4; i++) // Change the loop limit to 3 to allow 4 attempts
+        {
+            cout<<"Entering the password: ";
+            getline(cin, password); // Use getline to read the entire line
+            if (password == "12121980")
+            {
+                this_thread::sleep_for(chrono::seconds(2));
+                system("cls");
+                cout << "Entering the system..." << endl;
+                this_thread::sleep_for(chrono::seconds(3));
+                system("cls");
+                return 1;
+            }
+            else
+            {
+                cout << "You have " << 4 - i << " chances left." << endl; // Fix the output message
+            }
+        }
+        cout << "Password attempt limit reached. Closing the program." << endl;
+        return 0; // If four attempts are done the program returns zero and terminates the entire software.
+    }
+    else
+    {
+        this_thread::sleep_for(chrono::seconds(2)); //wait for two seconds
+        system("cls");
+        cout << "Entering the system..." << endl;
+        this_thread::sleep_for(chrono::seconds(3)); //wait for three seconds before clearing the terminal
+        system("cls"); // clear the console/terminal screen
+        return 1;
+    }
 }
 
 struct Gate
@@ -18,24 +91,27 @@ struct Gate
     int total_time = 0; //total time to process all the person in a gate
 };
 
+//sets the minimum difference between Max gate and Min gate for switching
 int setThreshold(int people)
 {
     if(people> 0 && people<=500)
     {
-        return 4;
+        return 6;
     }
     else
     {
-        return 9;
+        return 10;
     }
 
 }
 
-void updateTotalTime(Gate gate[] , int person , int i) // updates total time
+// Function to update total time
+void updateTotalTime(Gate gate[] , int person , int i)
 {
-    gate[i].total_time = gate[i].processing_time*person; // calculating total time processingtime x total number of people on that gate
+    gate[i].total_time = gate[i].processing_time*person; // calculating total time processing-time x total number of people on that gate
 }
 
+//Function which assigns random number of people by the user handlling the software.
 void randomAssign(Gate gate[] , int people , int size) //people = M/2 of the size
 {
     int counter = 0; // tracks the number of people assigned to the gate
@@ -47,14 +123,9 @@ void randomAssign(Gate gate[] , int people , int size) //people = M/2 of the siz
       cin>>gate[i].person;
       updateTotalTime(gate,gate[i].person , i);
       counter+=gate[i].person;
-      if(counter == people)
+      if(counter == people) //Assignment successfully done
       {
-          cout<<"Random Assignment of half people done successfully."<<endl;
-          for(int j = i+1 ; j<size ; j++)
-          {
-              gate[j].person = 0;
-              updateTotalTime(gate, gate[j].person , j);
-          }
+          cout<<endl<<"Random Assignment of half people done successfully."<<endl;
           break;
       }
       else if(counter > people) // if extra allocation is done in a gate than M/2
@@ -62,7 +133,7 @@ void randomAssign(Gate gate[] , int people , int size) //people = M/2 of the siz
           int extra = counter - people;
           gate[i].person -= extra;
           updateTotalTime(gate,  gate[i].person , i);
-          cout<<"There are only "<<gate[i].person<<" people left for random assignment which are assinged to Gate "<<i+1;
+          cout<<"There are only "<<gate[i].person<<" people left for random assignment which are assinged to Gate "<<i+1<<endl;
           for(int j = i+1 ; j<size ; j++)
           {
               gate[j].person = 0;
@@ -80,7 +151,7 @@ void randomAssign(Gate gate[] , int people , int size) //people = M/2 of the siz
         int remaining = people - counter;
         gate[size - 1].person += remaining;
         cout<<"There are "<<remaining<<" people still left, they are assigned to the gate "<<size<<endl;
-        cout<<"Random Assignment of half people done successfully."<<endl;
+        cout<<endl<<"Random Assignment of half people done successfully."<<endl;
     }
     return;
 }
@@ -88,21 +159,22 @@ void randomAssign(Gate gate[] , int people , int size) //people = M/2 of the siz
 int sumofPeople = 0; //keeping track of the rest of M/2 people.
 int temp = 0;
 
+//Function which mimic some amount of people random gate with passage of the time.
 void timerIncrement(Gate *gate , int size , int people)
 {
-    this_thread::sleep_for(chrono::milliseconds(10));
-    if(sumofPeople == people)
+     if(sumofPeople == people) // if all the people have entered no need for further increment in the gate.
     {
         cout<<endl<<"The rest of half of the people are also alloted."<<endl;
         return;
     }
-    int y = getRandomNumber(5,10); // number of people
-    int x = getRandomNumber(0,size-1); // gate number
+    this_thread::sleep_for(chrono::milliseconds(10)); // wait for ten seconds.
+    int y = getRandomNumber(5,10); // random number of people
+    int x = getRandomNumber(0,size-1); // random gate number
     sumofPeople+=y;
     if(sumofPeople<people)
     {
         temp=sumofPeople;
-        cout<<endl<<"The number of person alloted are: "<<y<<" And gate alloted is: "<<x+1<<endl;
+        cout<<endl<<"The number of people alloted are: "<<y<<" And gate alloted is: "<<x+1<<endl;
         gate[x].person += y;
         cout<<"The total person on gate-"<<x+1<<": "<<gate[x].person<<endl;
         updateTotalTime(gate , gate[x].person , x);
@@ -112,24 +184,25 @@ void timerIncrement(Gate *gate , int size , int people)
     else
     {
         int extra = 0;
-        extra = people - temp;
+        extra = people - temp; // if extra people are alloted by random function.
         sumofPeople = people;
         int x = getRandomNumber(0,size-1);
-        cout<<"Remaining "<<extra<<" persons are alloted gate-"<<x<<endl;
+        cout<<"Remaining "<<extra<<" people are alloted gate-"<<x<<endl;
         gate[x].person +=extra;
-        cout<<"The total persons on gate-"<<x+1<<" are "<<gate[x].person<<endl;
+        cout<<"The total people on gate-"<<x+1<<" are "<<gate[x].person<<endl;
         updateTotalTime(gate , gate[x].person , x);
         cout<<"Updated time after increment is: "<<gate[x].total_time<<endl;
     }
 
 }
 
+//function which allots random time to each gate
 void allocateTime(Gate gate[] , int size)
 {
     cout<<endl<<endl;
     for(int i = 0 ; i<size ; i++)
     {
-        int p = getRandomNumber(1,3);
+        int p = getRandomNumber(1,3);// range is 1-3 minutes.
         cout<<"Time for processing per person for gate: "<<i+1<<" is"<<p<<endl;
         gate[i].processing_time = p; // gate processing time gets allocated randomly between 1 and 3 minutes , including both
         gate[i].total_time = gate[i].processing_time * gate[i].person;
@@ -137,16 +210,17 @@ void allocateTime(Gate gate[] , int size)
 
 }
 
+//function which decreases the number of people
 void decrement(Gate *gate, int size) // decrements the number of people in the Queue
 {
-    cout<<endl<<"Persons left on each gate after decrement are: "<<endl;
+    cout<<endl<<"People left on each gate after decrement are: "<<endl;
     for(int i = 0 ; i<size ; i++)
    {
      if(gate[i].processing_time == 2 || gate[i].processing_time == 3 || gate[i].person == 1)
         {
              gate[i].person = max(0,gate[i].person-= 1); // if 2 or 3 minute is taken to process , then 1 will be processed in 3 minutes
         }
-      else  if(gate[i].processing_time==1)
+     else  if(gate[i].processing_time==1)
         {
             gate[i].person = max(0,gate[i].person-=3); // if 1 minute is take for 1 person than in  3 minutes 3 person will be processed
         }
@@ -156,22 +230,24 @@ void decrement(Gate *gate, int size) // decrements the number of people in the Q
 
 }
 
+//Function which mimics the decrement of people. By decrement it means the people are checked and have entered the gate.
 void timerDecrement(Gate *gate , int size)
 {
-        this_thread::sleep_for(chrono::milliseconds(20)); // function calling not activated 5 minutes
+        this_thread::sleep_for(chrono::milliseconds(20)); // further execution of the function waits for 20 seconds.
         decrement(gate , size);
         cout<<endl;
+        //prints the updated time after decrement
         for(int i = 0 ; i<size ; i++)
         {
-            cout<<"Person Left on gate"<<i+1<<" : "<<gate[i].person<<" ";
+            cout<<"People Left on gate"<<i+1<<" : "<<gate[i].person<<" ";
             updateTotalTime(gate , gate[i].person , i);
-            cout<<"Updated time is: "<<gate[i].total_time<<endl;
+            cout<<"Updated time is: "<<gate[i].total_time<<" minutes. "<<endl;
         }
         cout<<endl;
 
 }
 
-
+//Function which checks if all gates have zero persons.
 int allZero(Gate gate[] , int size)
 {
     int sum = 0;
@@ -185,6 +261,7 @@ int allZero(Gate gate[] , int size)
     return 1;
 }
 
+//Function which returns the index of gate with maximum total time
 int getMaxIndex(Gate gate[] , int size) //returns the index of the gate having the most processing time
 {
     int index = 0;
@@ -200,6 +277,7 @@ int getMaxIndex(Gate gate[] , int size) //returns the index of the gate having t
     return index;
 }
 
+//function which returns the index of the gate with least total time
 int getMinIndex(Gate gate[], int size)
 {
     int index = 0;
@@ -215,19 +293,26 @@ int getMinIndex(Gate gate[], int size)
     return index;
 }
 
-
+//Function which helps switching gate.
 void switchGate(Gate gate[] , int size , int person)
 {
     int iteration = 0; // to keep track of iterations the loop is going in.
     int temp1 = getMaxIndex(gate,size) ; // to ensure switching done between two same gates.
     int temp2 = getMinIndex(gate,size); // to ensure no collison . temp2 = minIndex.
-    cout<<"The gate with most time is: "<<temp1+1<<" and the gate with the least time is: "<<temp2+1<<endl;
     int temp3 = 0; //to ensure no collision. temp3 = maxIndex.
     int temp4 = temp1;
     int temp5 = temp2;
     int checker = 0;
-    int counter = 0;
+    int counter = 0; // to keep track of the number people who have switched from the gate
     int choice = 0;
+    int difference = gate[temp1].total_time - gate[temp2].total_time;
+    if(difference<=setThreshold(person)) // if difference is less than threshold time set by the function, no need of switching as there will be some difference.
+    {
+        cout<<"No need for switching."<<endl;
+        return;
+    }
+    //Making the choice to switching or not
+    cout<<"The gate with most time is: "<<temp1+1<<endl;
     cout<<"Do they want to switch?(0/1) ";
     cin>>choice;
 
@@ -236,7 +321,9 @@ void switchGate(Gate gate[] , int size , int person)
         cout<<"They will regret."<<endl;
         return;
     }
-    else{
+
+    else
+    {
     while(true)
     {
         int minIndex = getMinIndex(gate , size);
@@ -245,26 +332,24 @@ void switchGate(Gate gate[] , int size , int person)
         int maxTime = gate[maxIndex].total_time;
 
 
-        if(temp1!=maxIndex)
+        if(temp1!=maxIndex) //during the second or the further iteration if maxIndex changes the loop stops
         {
             break;
         }
         if(checker == 1)
         {
          checker = 0;
-        if(temp2 == maxIndex && temp3 == minIndex)
+        if(temp2 == maxIndex && temp3 == minIndex) // to prevent collisions.
         {
-            cout<<"No need of switching."<<endl;
             break;
         }
         }
-        int threshold = maxTime - minTime;
+        int threshold = maxTime - minTime; //difference between the total time of max and min gates
 
-        if(threshold<= setThreshold(person) || iteration >=10)
+        if(threshold<= setThreshold(person) || iteration >=10) // iteration ensures the loop doesn't iterate more than 10 time.
         {
            if(threshold <= 6)
            {
-               cout<<"No need of switching."<<endl;
                break;
            }
            if(iteration == 10)
@@ -272,8 +357,9 @@ void switchGate(Gate gate[] , int size , int person)
                break;
            }
         }
-        if(threshold == maxTime)
+        if(threshold == maxTime) // min gate has 0 people in it
         {
+            //one third people are transferred from the max gate to min gate if min gate has processing time equal to 3
             if(gate[minIndex].processing_time == 3)
             {
                 int temp = gate[maxIndex].person/3;
@@ -281,6 +367,7 @@ void switchGate(Gate gate[] , int size , int person)
                 gate[minIndex].person += temp;
                 counter += temp;
             }
+            //one half of people are transferred from the max gate to min gate if min gate has processing time equal to 2 or 1
             else
             {
                 int temp  = gate[minIndex].person/2;
@@ -347,9 +434,12 @@ void switchGate(Gate gate[] , int size , int person)
             counter+=temp;
         }
 
+        //after decrements the total time on each gate is updates
         updateTotalTime(gate , gate[maxIndex].person , maxIndex);
         updateTotalTime(gate , gate[minIndex].person , minIndex);
         iteration++;
+        //variables are updated
+
         temp1 = maxIndex;
         temp2 = minIndex;
         temp3 = temp1;
@@ -358,7 +448,7 @@ void switchGate(Gate gate[] , int size , int person)
     }
     if(counter == 0)
     {
-        cout<<"No person are transferred from gate-"<<temp1+1<<endl;
+        cout<<"No people are transferred from gate-"<<temp1+1<<endl;
 
     }
     else if(counter == 1)
@@ -367,12 +457,13 @@ void switchGate(Gate gate[] , int size , int person)
     }
     else
     {
-        cout<<counter<<" persons are transferred from gate-"<<temp1+1<<" to various gates."<<endl;
+        cout<<counter<<" people are transferred from gate-"<<temp1+1<<" to various gates."<<endl;
     }
     return;
     }
 }
 
+//Function which suggest people to which gate they can enter
 void displayLeastTime(Gate gate[] , int size)
 {
     int minIndex = getMinIndex(gate,size);
@@ -382,12 +473,17 @@ void displayLeastTime(Gate gate[] , int size)
 
 int main()
 {
+    int checker = checkPassword();
+    if(!checker)
+    {
+        return 0;
+    }
     int M = 0; // number of people
     int N = 0; // number of gates;
     cout<<"Enter the number of the gates: ";
     cin>>N;
-
     Gate gate[N];
+
     cout<<endl<<"Enter the total number of people: ";
     cin>>M;
 
@@ -407,18 +503,25 @@ int main()
 
     while(true)
     {
+        //creation of the threads
         thread t1([&](){timerIncrement(gate , N , M/2);});
-        t1.join();
 
         thread t2([&](){timerDecrement(gate,N);});
+
+        //waiting for both thread to complete execution before further exectuion
+        t1.join();
         t2.join();
+
+       //Conditions to exit the loop.
        if(sumofPeople>=M/2 && allZero(gate,N))
        {
-           cout<<"No one is left in Queue.";
+           cout<<"No one is left in Queue."<<endl;
+           cout<<"Terminating Program."<<endl<<endl;
            break;
        }
 
        switchGate(gate , N  , M/2);
     }
+
     return 0;
 }
