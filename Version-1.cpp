@@ -1,3 +1,7 @@
+// User ID: rygbeeRAx
+// Password : 12121980
+
+
 #include<iostream>
 #include<chrono>
 #include<cmath>
@@ -111,7 +115,7 @@ void updateTotalTime(Gate gate[] , int person , int i)
     gate[i].total_time = gate[i].processing_time*person; // calculating total time processing-time x total number of people on that gate
 }
 
-//Function which assigns random number of people by the user handlling the software.
+//Function which assigns random number of people by the user handling the software.
 void randomAssign(Gate gate[] , int people , int size) //people = M/2 of the size
 {
     int counter = 0; // tracks the number of people assigned to the gate
@@ -167,7 +171,7 @@ void timerIncrement(Gate *gate , int size , int people)
         cout<<endl<<"The rest of half of the people are also alloted."<<endl;
         return;
     }
-    this_thread::sleep_for(chrono::milliseconds(10)); // wait for ten seconds.
+    this_thread::sleep_for(chrono::seconds(10)); // wait for ten seconds.
     int y = getRandomNumber(5,10); // random number of people
     int x = getRandomNumber(0,size-1); // random gate number
     sumofPeople+=y;
@@ -233,7 +237,7 @@ void decrement(Gate *gate, int size) // decrements the number of people in the Q
 //Function which mimics the decrement of people. By decrement it means the people are checked and have entered the gate.
 void timerDecrement(Gate *gate , int size)
 {
-        this_thread::sleep_for(chrono::milliseconds(20)); // further execution of the function waits for 20 seconds.
+        this_thread::sleep_for(chrono::seconds(20)); // further execution of the function waits for 20 seconds.
         decrement(gate , size);
         cout<<endl;
         //prints the updated time after decrement
@@ -525,3 +529,4 @@ int main()
 
     return 0;
 }
+
