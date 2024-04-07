@@ -20,7 +20,7 @@ Important Note : We have Submitted 2 Version of Our Program.Both of them have sa
     Here comes the most important part of the code.This is the part where the both version of the code differ in this version the switching 
     is done automatically.As people comes randomly after the switching and then the switching switch the people from the gate which 
     contains the maximum people to the gate which contains the minimum people.The time is updated after the each increment and decrement 
-    in the code.And here as time goes the people are also entering through the gates such that decrement is alo there.And this code will 
+    in the code.And here as time goes the people are also entering through the gates such that decrement is also there.And this code will 
     run till all gates contains zero people.
     
 ##About the Version 2:
