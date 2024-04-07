@@ -13,7 +13,7 @@ Important Note : We have Submitted 2 Version of Our Program.Both of them have sa
     Then there program asks the user to enter the number of people in the Stadium.Then there is Random allocation of half people is done by the user by entering the people at each gate.After the Random Allocation the
     the rest half people will be assigned to random gate in the form group contains random people and the gates are also opened for the peoples in the stadium when the rest people started entering the gates.
     
-    The time is update after the each increment and decrement in the code.And after each increment and decrement there is switching of the people form one gate to another gate occuring.The peoples from gate consists of 
+    The time is updated after the each increment and decrement in the code.And after each increment and decrement there is switching of the people form one gate to another gate occuring.The peoples from gate consists of 
     maximum people are assigned to the gate with the minimum time.
     
     And we added few more features to this code which will give better experience to the user.
