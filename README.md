@@ -84,14 +84,6 @@ Version 2:
 
 Version 1:
 
-    The idea of this version was firstly came in the mind of our captain jeet while the brainstroming session of our group.Then the implemnetation is
-    done by the willingness of the whole group.
-
-    Jeet Dahiya(Captain) : He brought the idea of chrono and thread and its implementation.He and Raj also made an switching function.
-    Dhruv Gohil : He made the increment and decrement function and let the people in the queue can go through the gates.
-    Neel Shah : He made the Random Assignment function in the code.
-    Raj Makwana : He and jeet made the Switching function.
-
 Version 2:
 
     This
