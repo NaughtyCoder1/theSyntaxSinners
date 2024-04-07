@@ -5,13 +5,15 @@
 Important Note : We have Submitted 2 Version of Our Program.Both of them have same motive to get the people at the gates of the stadium get Entry in minimum time but both are implemented differently.The main code in both the codes is version 1.
 
 ##About the Version 1:
+  Important Note : Please use C++14 or above version and compile code using Code::Blocks as it uses windows terminal for code. The code consists of lines which helps clear 
+  the terminal of code at some places.
     About Functionality of the code: 
    
     We implemented this code with the help of Array Data Structure.
     
     First of all Program ask the user to enter the number of gates the stadium consists.Than using random function is used to allocate time to each gate.
     Then there program asks the user to enter the number of people in the Stadium.Then there is Random allocation of half people is done by the user by entering the people at each gate.After the Random Allocation 
-    the rest half people will be assigned to random gate in the form group contains random people and the gates are also opened for the peoples in the stadium when the rest people started entering the gates.The       time is updated after the each increment and decrement in the code.And after each increment and decrement there is switching of the people form one gate to another gate occuring.The peoples from gate consists     of maximum people are assigned to the gate with the minimum time.
+    the rest half people will be assigned to random gate in the form group contains random people and the gates are also opened for the peoples in the stadium when the rest people started entering the gates.The time is updated after the each increment and decrement in the code.And after each increment and decrement there is switching of the people form one gate to another gate occuring.The peoples from gate consists of maximum people are assigned to the gate with the minimum time.
     
     And we added few more features to this code which will give better experience to the user.
 
