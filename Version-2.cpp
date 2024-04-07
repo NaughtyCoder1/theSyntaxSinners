@@ -239,7 +239,7 @@ int main(){
             suggestSwitch(gates,Totalgates);
             EntryManager(gates, (Totalpeople+1)/2, Totalgates);
         }
-
+        delete gates;
         cout<<"THANK YOU.\n";
         return 0;
     }
