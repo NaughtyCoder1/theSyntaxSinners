@@ -39,7 +39,8 @@ Important Note : We have Submitted 2 Version of Our Program.Both of them have sa
 
 
 ##Addtional Features in both the Versions:
-      Version 1:
+
+Version 1:
 
       In this version we added several function which helps the program to run with the time.We used the chrono library which help to 
 
