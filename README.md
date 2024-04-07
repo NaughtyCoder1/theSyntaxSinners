@@ -49,6 +49,8 @@ Important Note: We have Submitted 2 Version of Our Program. Both of them have sa
     will run till the time at each gate is not nearly same or have very small difference.
 
 ##Contribution:
+
+
   We came up with idea of both versions in group discussions which happened almost regularly. Initially, we came up with idea of version-1 and started coding and later, we 
   came up with idea for version-2, where in certain changes as discussed above were made. Due to shortage of time, we divided in pair of duos coded both versions  
   concurrently. However, it was all done during group meetings. This approach ensured that we discussed and incorporated ideas of every member in the code. 
