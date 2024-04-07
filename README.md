@@ -56,22 +56,6 @@ version 2:
       people in the Queue are also passin through the gates and entering the stadium.The advantage of this version is that is easy to understand 
       it very easy to implement.
 
-##Assumptions:
-
-Version 1:
-
-
-Version 2:
-
-      1)The output of the code is designed considering a person is handling the software.
-      2)The people who agreed to switch are switched till required conditions are not met according to the algorithm. 
-      3)No individual consent for switching is taken, the switching is done if a majority is agreeing to switch.
-      4)The consent is assumed to reach the handler using some mode of communication (e.g. some employee on ground.)
-      5)To make it more real time, the p minutes(i.e processing time per person at each gate) is taken randomly within a certain range. In real 
-      time the people who will check will not take uniform time.
-      6)The rest of M/2 people who will enter are made to enter at random time at a random gate, as in real life, people won't enter in the same amount and at the same gate.
-      7)To mimic server refresh/lag, the updates are displayed with some delay.
-
 ##Conclution:
 
       In this both the version the code in minimizing the time of the gates through which they are going to enter.This codes helps the Queue 
