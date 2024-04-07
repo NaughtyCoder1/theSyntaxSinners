@@ -22,17 +22,19 @@ Important Note: We have Submitted 2 Version of Our Program. Both of them have sa
   About Functionality of the code: 
    
     We implemented this code with the help of Array of Structures Data Structure.
+
+    Note: The code attempts to mimic server which updates after every three minutes. But to make things quick while checking, we have kept the time in seconds which can set 
+    to minutes. To do so, the instructions are given in the document.
     
-    First of all, code ask the user to enter the number of gates the stadium consists. Then using random function is used to allocate
-    time to each gate. Then there program asks the user to enter the number of people in the Stadium. Then there is Random allocation of  
-    half people are done by the user by entering the people at each gate. After the Random Allocation the rest half people will be assigned 
-    to random gate in the form group contains random people and the gates are also opened for the peoples in the stadium when the rest 
-    people started entering the gates. And after each increment there is switching of the people form one gate to another gate occurring.
-    Here comes the most important part of the code. This is the part where the both version of the code differ in this version the switching 
-    is done automatically. As people comes randomly after the switching and then the switching switch the people from the gate which 
-    contains the maximum people to the gate which contains the minimum people. The time is updated after the each increment and decrement 
-    in the code. And here as time goes the people are also entering through the gates such that decrement is also there. And this code will 
-    run till all gates contains zero people.
+    First of all, code asks the user to enter the number of gates the stadium consists. Then random function is used to allocate
+    time to each gate. Then the program asks the user to enter the total number of people present. Then there is Random allocation of  
+    first half people done by the user. After the Random Allocation the rest half people will be assigned 
+    to random gate in the random amount with passage of time.Increment and decrement happens concurrently with passage of time. 
+    And after each increment, decrement through each gates happens and then switching condition is asked.
+    Here comes the most important part of the code. This is the part where the both version of the code differ, in this version the switching 
+    is done based on general consensus of people.If general consensus is positive, then switching is done till criteria according to switching algorithm are not met.
+    The time is updated after the each increment and decrement in the code. And this code will run till all gates do not become empty.
+    
     
 ##About the Version 2:
     About Functionality of the code:
